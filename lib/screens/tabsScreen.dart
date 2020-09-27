@@ -1,26 +1,37 @@
 import 'package:app_food_flutter/components/mainDrawer.dart';
+import 'package:app_food_flutter/models/meal.dart';
 import 'package:app_food_flutter/screens/favoriteScreen.dart';
 import 'package:flutter/material.dart';
 import 'categoriesScreen.dart';
 
 class TabsScreen extends StatefulWidget {
+  final List<Meal> favoriteMeals;
+
+  const TabsScreen(this.favoriteMeals);
+
   @override
   _TabsScreenState createState() => _TabsScreenState();
 }
 
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedScreenIndex = 0;
+  List<Map<String, Object>> _screens;
 
-  final List<Map<String, Object>> _screens = [
-    {
-      'title': 'Lista de Categorias',
-      'screen': CategoriesScreen(),
-    },
-    {
-      'title': 'Meus Favoritos',
-      'Screen': FavoriteScreen(),
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+
+    _screens = [
+      {
+        'title': 'Lista de Categorias',
+        'screen': CategoriesScreen(),
+      },
+      {
+        'title': 'Meus Favoritos',
+        'Screen': FavoriteScreen(widget.favoriteMeals),
+      },
+    ];
+  }
 
   _selectScreen(int index) {
     setState(() {
@@ -41,18 +52,20 @@ class _TabsScreenState extends State<TabsScreen> {
       ),
       body: _screens[_selectedScreenIndex]['screen'],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: themeContext.primaryColor,
         unselectedItemColor: Colors.white,
         selectedItemColor: themeContext.accentColor,
         currentIndex: _selectedScreenIndex,
         onTap: _selectScreen,
-        type: BottomNavigationBarType.shifting,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: themeContext.primaryColor,
         items: [
           BottomNavigationBarItem(
+            backgroundColor: themeContext.primaryColor,
             icon: Icon(Icons.category),
             label: "Categorias",
           ),
           BottomNavigationBarItem(
+            backgroundColor: themeContext.primaryColor,
             icon: Icon(Icons.star),
             label: "Favoritos",
           ),
